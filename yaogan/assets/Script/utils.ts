@@ -25,7 +25,7 @@ export default class Utils {
     }
 
     /** 设置图片*/
-    public setSpriteFrame(node: Node, url: string, defaultUrl: string = null): void {
+    public setSpriteFrame(node: Node, url: string, defaultUrl: string = null, size: number | cc.Size = null): void {
         if (!node) {
             console.error("设置节点为空")
         }
@@ -47,6 +47,7 @@ export default class Utils {
             })
     }
 
+    /**给节点添加组件 */
     public addComponent<T extends cc.Component>(node: cc.Node | cc.Component, componentClass: { prototype: T }): T {
         if (node) {
             let comp: any = node.getComponent(componentClass);
