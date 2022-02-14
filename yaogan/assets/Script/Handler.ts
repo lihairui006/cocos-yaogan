@@ -1,28 +1,32 @@
-// Learn TypeScript:
-//  - https://docs.cocos.com/creator/manual/en/scripting/typescript.html
-// Learn Attribute:
-//  - https://docs.cocos.com/creator/manual/en/scripting/reference/attributes.html
-// Learn life-cycle callbacks:
-//  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
 
-const {ccclass, property} = cc._decorator;
 
-@ccclass
-export default class NewClass extends cc.Component {
+export default class Handler {
 
-    @property(cc.Label)
-    label: cc.Label = null;
+    private caller: any = null;
+    private method: Function = null
+    private args: Array<any> = [];
+    private once: boolean = false;
 
-    @property
-    text: string = 'hello';
-
-    // LIFE-CYCLE CALLBACKS:
-
-    // onLoad () {}
-
-    start () {
-
+    constructor(caller: any = null, method: Function = null, args: Array<any> = [], once: boolean = true) {
+        this.setTo(caller, method, args, once);
     }
 
-    // update (dt) {}
+    private setTo(caller: any, method: Function, args: Array<any>, once: boolean): void {
+        this.caller = caller;
+        this.method = method;
+        this.args = args;
+        this.once = once;
+    }
+
+    /**
+     * 从对象池内创建一个Handler,默认会执行一次立即回收，如果不需要自动回收，设置once为false
+     * @param caller 执行域
+     * @param method 回调函数
+     * @param args 携带的参数
+     * @param once 是否只执行一次
+     * @return 返回创建的Handler的实例
+     */
+    public static create(caller: any, method: Function, args: Array<any> = null, once: boolean = true) {
+        return new Handler(caller, method, args, once);
+    }
 }
